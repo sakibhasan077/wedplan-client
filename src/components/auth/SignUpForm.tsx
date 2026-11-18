@@ -312,7 +312,7 @@ export default function SignUpForm() {
                   height={40}
                   className="size-10 rounded-full object-cover border border-border"
                 />
-                <span className="text-xs text-foreground font-medium truncate max-w-[200px]">
+                <span className="text-xs text-foreground font-medium truncate max-w-50">
                   {imageFile?.name}
                 </span>
               </div>
