@@ -34,6 +34,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Role = "customer" | "vendor" | "admin";
 
@@ -42,6 +43,48 @@ type MenuItem = {
   href: string;
   icon: LucideIcon;
 };
+
+function DashboardSidebarSkeleton() {
+  const { state } = useSidebar();
+
+  return (
+    <Sidebar collapsible="icon" className="border-r border-sidebar-border bg-sidebar">
+      <SidebarHeader className="border-b border-sidebar-border p-3 group-data-[collapsible=icon]:p-2">
+        {state === "expanded" ? (
+          <div className="flex items-center justify-between gap-2">
+            <Skeleton className="h-10 w-36" />
+            <SidebarTrigger className="size-9 border border-sidebar-border bg-card text-sidebar-foreground" />
+          </div>
+        ) : (
+          <SidebarTrigger className="mx-auto size-9 border border-sidebar-border bg-card text-sidebar-foreground" />
+        )}
+      </SidebarHeader>
+
+      <SidebarContent>
+        <SidebarGroup className="px-3 py-4 group-data-[collapsible=icon]:px-2">
+          <SidebarMenu className="gap-1">
+            {Array.from({ length: 6 }, (_, index) => (
+              <SidebarMenuItem key={index}>
+                <div className="flex h-11 items-center gap-3 rounded-lg px-3 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2">
+                  <Skeleton className="size-4 shrink-0 rounded-md" />
+                  <Skeleton className="h-4 w-24 group-data-[collapsible=icon]:hidden" />
+                </div>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter className="mt-auto border-t border-sidebar-border p-3 group-data-[collapsible=icon]:px-2">
+        <div className="flex items-center gap-3 px-1 py-2 group-data-[collapsible=icon]:justify-center">
+          <Skeleton className="size-11 shrink-0 rounded-full" />
+          <Skeleton className="h-4 w-24 group-data-[collapsible=icon]:hidden" />
+        </div>
+        <Skeleton className="h-10 w-full rounded-lg" />
+      </SidebarFooter>
+    </Sidebar>
+  );
+}
 
 const sharedItems: MenuItem[] = [
   { label: "Home", href: "/", icon: Home },
@@ -98,7 +141,7 @@ export function DashboardSidebar() {
   };
 
   if (isPending) {
-    return null;
+    return <DashboardSidebarSkeleton />;
   }
 
   return (
