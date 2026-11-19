@@ -128,6 +128,13 @@ export function DashboardSidebar() {
     roleValue === "vendor" || roleValue === "admin" ? roleValue : "customer";
 
   const menuItems = [...sharedItems, ...roleMenuItems[role]];
+  const activeHref = menuItems
+    .filter((item) =>
+      item.href === "/"
+        ? pathname === "/"
+        : pathname === item.href || pathname.startsWith(`${item.href}/`),
+    )
+    .sort((a, b) => b.href.length - a.href.length)[0]?.href;
   const userName = user?.name?.trim() || "User";
   const userInitial = userName.charAt(0).toUpperCase();
   const isExpanded = state === "expanded";
@@ -172,16 +179,11 @@ export function DashboardSidebar() {
         <SidebarGroup className="px-3 py-4 group-data-[collapsible=icon]:px-2">
           <SidebarMenu className="gap-1">
             {menuItems.map((item) => {
-              const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname === item.href || pathname.startsWith(`${item.href}/`);
-
               return (
                 <SidebarMenuItem key={`${item.label}-${item.href}`}>
                   <SidebarMenuButton
                     render={<Link href={item.href} />}
-                    isActive={isActive}
+                    isActive={item.href === activeHref}
                     tooltip={item.label}
                     size="lg"
                     className="h-11 rounded-lg px-3 text-sm font-medium data-[active=true]:bg-primary data-[active=true]:text-primary-foreground group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2"
