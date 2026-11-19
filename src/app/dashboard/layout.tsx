@@ -1,15 +1,14 @@
 import type { ReactNode } from "react";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { DashboardTopbar } from "@/components/dashboard/DashboardTopbar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   return (
     <SidebarProvider>
       <DashboardSidebar />
-      <main className="flex-1">
-        <div className="border-b border-border p-2 md:hidden">
-          <SidebarTrigger />
-        </div>
+      <main className="min-w-0 flex-1">
+        <DashboardTopbar />
         {children}
       </main>
     </SidebarProvider>
