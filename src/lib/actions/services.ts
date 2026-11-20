@@ -29,3 +29,21 @@ export const getServicesByVendorId = async (vendorId: string) => {
     throw error;
   }
 }
+
+// update Services
+export const updateServices = async(serviceId: string, data: any) => {
+  try {
+    const url = `${BASE_URL}/services/${serviceId}`;
+    const res = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  }catch (error) {
+    console.error('Error occurred while making PUT request:', error);
+    throw error;
+  }
+}

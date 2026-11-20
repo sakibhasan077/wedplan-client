@@ -15,9 +15,8 @@ export const metadata: Metadata = {
 const ServicesPage = async () => {
   const session = await useServerSession();
   const vendorId = session?.user?.id;
-  const servicesData = await getServicesByVendorId(vendorId as string);
-
-  const services: Service[] = Array.isArray(servicesData) ? servicesData : [];
+  const servicesData:Service[] = await getServicesByVendorId(vendorId as string);
+  const services: Service[] = Array.isArray(servicesData) ? servicesData:  [];
 
   return (
     <main className="p-4 sm:p-6">
@@ -44,7 +43,13 @@ const ServicesPage = async () => {
               <span className="sm:hidden">Add</span>
             </Button>
           </div>
-          <VendorServiceList services={services} />
+          <div>
+            {
+              services.map((service)=><VendorServiceList key={service._id} service = {service}>
+
+              </VendorServiceList>)
+            }
+          </div>
         </section>
       </div>
     </main>
