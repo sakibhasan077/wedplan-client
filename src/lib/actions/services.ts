@@ -18,6 +18,15 @@ export const addService = async (data: any) => {
   }
 }
 
+// Get Services by id
+export const getServiceById = async (serviceId: string) => {
+  const res = await fetch(`${BASE_URL}/services/${serviceId}`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch service');
+  }
+  return res.json();
+}
+
 // Get Services by vendor id
 export const getServicesByVendorId = async (vendorId: string) => {
   try {
