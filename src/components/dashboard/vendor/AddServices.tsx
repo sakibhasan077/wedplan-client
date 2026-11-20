@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { addService } from "@/lib/actions/services";
 import { useClientSession } from "@/lib/core/client-session";
-import { ImagePlus, Info, UploadCloud } from "lucide-react";
+import { ImagePlus, Info, Loader2, UploadCloud } from "lucide-react";
 import Link from "next/link";
 import type { ChangeEvent, DragEvent, FormEvent } from "react";
 import { useState } from "react";
@@ -42,6 +42,7 @@ export default function AddServices() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<FormErrors>({});
   const [formMessage, setFormMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { session } = useClientSession();
 
@@ -106,6 +107,8 @@ export default function AddServices() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isSubmitting) return;
+
     setFormMessage("");
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -153,26 +156,39 @@ export default function AddServices() {
       return;
     }
 
-    const imageUrl = await uploadImageToImgbb(imageFile);
+    setIsSubmitting(true);
 
-    const data = {
-      vendorId: session?.user?.id,
-      serviceName,
-      category,
-      description,
-      price: Number(priceValue),
-      location,
-      imageUrl,
-      createdAt: new Date().toISOString(),
-    }
+    try {
+      const imageUrl = await uploadImageToImgbb(imageFile);
+      const data = {
+        vendorId: session?.user?.id,
+        serviceName,
+        category,
+        description,
+        price,
+        location,
+        imageUrl,
+        createdAt: new Date().toISOString(),
+      };
 
-    const result = await addService(data);
-    if(result.insertedId){
-      toast.success("Service added successfully! It will be reviewed by an admin before appearing publicly.");
-      form.reset()
-    }
-    else{
-      toast.error("Failed to add service. Please try again.");
+      const result = await addService(data);
+      if (result.insertedId) {
+        toast.success(
+          "Service added successfully! It will be reviewed by an admin before appearing publicly.",
+        );
+        form.reset();
+        setImageFile(null);
+      } else {
+        toast.error("Failed to add service. Please try again.");
+      }
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to add service. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -419,13 +435,21 @@ export default function AddServices() {
                 nativeButton= {false}
                 type="button"
                 variant="outline"
+                disabled={isSubmitting}
                 render={<Link href="/dashboard/vendor/services" />}
                 className="h-10 w-full sm:w-auto"
               >
                 Cancel
               </Button>
-              <Button type="submit" className="h-10 w-full sm:w-auto">
-                Submit for Review
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="h-10 w-full sm:w-auto"
+              >
+                {isSubmitting && (
+                  <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+                )}
+                {isSubmitting ? "Submitting..." : "Submit for Review"}
               </Button>
             </div>
           </form>
