@@ -7,6 +7,7 @@ import { Check, Clock3, MapPin, Pencil, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Service } from "@/types/type";
 import { updateServices } from "@/lib/actions/services";
+import { DeleteDialog } from "./DeleteServiceDialog";
 
 type VendorServiceListProps = {
   service: Service;
@@ -20,15 +21,6 @@ const VendorServiceList = ({ service }: VendorServiceListProps) => {
     const result = await updateServices(service._id, { isActive: !isActive });
   };
 
-  const handleDelete = () => {
-    const confirmed = window.confirm(
-      `Delete "${service.serviceName}" from your services?`,
-    );
-
-    if (confirmed) {
-      setIsDeleted(true);
-    }
-  };
 
   const formattedPrice = new Intl.NumberFormat("en-BD").format(service.price);
 
@@ -133,15 +125,7 @@ const VendorServiceList = ({ service }: VendorServiceListProps) => {
           Edit
         </Button>
 
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={handleDelete}
-          aria-label={`Delete ${service.serviceName}`}
-        >
-          <Trash2 aria-hidden="true" />
-          Delete
-        </Button>
+        <DeleteDialog serviceId={service._id}></DeleteDialog>
       </div>
     </article>
   );

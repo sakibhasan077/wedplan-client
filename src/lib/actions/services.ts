@@ -56,3 +56,17 @@ export const updateServices = async(serviceId: string, data: any) => {
     throw error;
   }
 }
+
+//Delete Services
+export const deleteService = async(serviceId: string) => {
+  try {
+    const url = `${BASE_URL}/services/${serviceId}`;
+    const res = await fetch(url, {
+      method: 'DELETE',
+    });
+    return res.json();
+  }catch (error) {
+    console.error('Error occurred while making DELETE request:', error);
+    throw error;
+  }
+}
