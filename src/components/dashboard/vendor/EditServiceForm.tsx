@@ -10,6 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { Service } from "@/types/type";
 import { updateServices } from "@/lib/actions/services";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const categories = [
   "Photography & Videography",
@@ -28,7 +30,7 @@ export default function EditServiceForm({ service }: EditServiceFormProps) {
   const [imagePreview, setImagePreview] = useState(service.imageUrl);
   const [message, setMessage] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
-
+  const router = useRouter()
   useEffect(() => {
     if (!imagePreview || imagePreview === service.imageUrl) {
       return;
@@ -86,7 +88,12 @@ export default function EditServiceForm({ service }: EditServiceFormProps) {
     const data = Object.fromEntries(formData.entries());
     const imageUrl = imageFile ? await uploadImage(imageFile) : imagePreview;
     const result = await updateServices(service._id,{imageUrl,...data})
-    console.log(result);
+    if(result.modifiedCount){
+      toast.success("Service updated successfully!");
+      router.push("/dashboard/vendor/services")
+    }else{
+      toast.error("Failed to update service. Please try again.");
+    }
   };
 
   const fieldClassName =

@@ -30,7 +30,7 @@ export const getServiceById = async (serviceId: string) => {
 // Get Services by vendor id
 export const getServicesByVendorId = async (vendorId: string) => {
   try {
-    const url = `${BASE_URL}/services/${vendorId}`;
+    const url = `${BASE_URL}/services/vendor/${vendorId}`;
     const res = await fetch(url);
     return res.json();
   } catch (error) {
