@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { UploadCloud } from "lucide-react";
+import { Loader2, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -30,6 +30,7 @@ export default function EditServiceForm({ service }: EditServiceFormProps) {
   const [imagePreview, setImagePreview] = useState(service.imageUrl);
   const [message, setMessage] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const router = useRouter()
   useEffect(() => {
     if (!imagePreview || imagePreview === service.imageUrl) {
@@ -81,18 +82,32 @@ export default function EditServiceForm({ service }: EditServiceFormProps) {
 
     return result.data.url;
   };
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    const imageUrl = imageFile ? await uploadImage(imageFile) : imagePreview;
-    const result = await updateServices(service._id,{imageUrl,...data})
-    if(result.modifiedCount){
-      toast.success("Service updated successfully!");
-      router.push("/dashboard/vendor/services")
-    }else{
-      toast.error("Failed to update service. Please try again.");
+    if (isSaving) return;
+
+    setIsSaving(true);
+    try {
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      const imageUrl = imageFile ? await uploadImage(imageFile) : imagePreview;
+      const result = await updateServices(service._id, { imageUrl, ...data });
+
+      if (result.modifiedCount) {
+        toast.success("Service updated successfully!");
+        router.push("/dashboard/vendor/services");
+      } else {
+        toast.error("Failed to update service. Please try again.");
+      }
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to update service. Please try again.",
+      );
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -268,13 +283,21 @@ export default function EditServiceForm({ service }: EditServiceFormProps) {
               <Button
                 nativeButton={false}
                 variant="outline"
+                disabled={isSaving}
                 render={<Link href="/dashboard/vendor/services" />}
                 className="w-full sm:w-auto"
               >
                 Cancel
               </Button>
-              <Button type="submit" className="w-full sm:w-auto">
-                Save Changes
+              <Button
+                type="submit"
+                disabled={isSaving}
+                className="w-full sm:w-auto"
+              >
+                {isSaving && (
+                  <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+                )}
+                {isSaving ? "Saving..." : "Save Changes"}
               </Button>
             </div>
           </form>
