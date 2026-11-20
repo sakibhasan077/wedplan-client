@@ -25,6 +25,32 @@ export const auth = betterAuth({
         required: false,
         defaultValue: "customer",
       },
+      isBlocked: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
+        input: false,
+      },
+
+      subscriptionPlan: {
+        type: ["Free", "Premium"],
+        required: false,
+        defaultValue: "Free",
+        input: false,
+      },
+      businessName: {
+        type: "string",
+        required: false,
+        defaultValue: null,
+        input: false,
+      },
+
+      subscriptionExpiresAt: {
+        type: "date",
+        required: false,
+        defaultValue: null,
+        input: false,
+      },
     },
   },
 });
