@@ -162,6 +162,8 @@ export default function AddServices() {
       const imageUrl = await uploadImageToImgbb(imageFile);
       const data = {
         vendorId: session?.user?.id,
+        vendorName: session?.user?.name,
+        vendorEmail: session?.user?.email,
         serviceName,
         category,
         description,

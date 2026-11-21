@@ -1,7 +1,7 @@
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 // post request to the server
-export const addService = async (data: any) => {
+export const addService = async (data: unknown) => {
   try {
     const url = `${BASE_URL}/services`;
     const res= await fetch(url,{
@@ -40,7 +40,10 @@ export const getServicesByVendorId = async (vendorId: string) => {
 }
 
 // update Services
-export const updateServices = async(serviceId: string, data: any) => {
+export const updateServices = async(
+  serviceId: string,
+  data: Record<string, unknown>,
+) => {
   try {
     const url = `${BASE_URL}/services/${serviceId}`;
     const res = await fetch(url, {
@@ -68,5 +71,20 @@ export const deleteService = async(serviceId: string) => {
   }catch (error) {
     console.error('Error occurred while making DELETE request:', error);
     throw error;
+  }
+}
+
+// Get all services for the admin review page
+export const getAdminServices = async (query="") => {
+  try {
+    const url = `${BASE_URL}/admin/services?${query}`;
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) {
+      return [];
+    }
+    return res.json();
+  } catch (error) {
+    console.error("Error occurred while fetching admin services:", error);
+    return [];
   }
 }

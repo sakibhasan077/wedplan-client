@@ -6,8 +6,15 @@ export type Service = {
   description: string;
   price: number;
   location: string;
-  imageUrl: string;
+  imageUrl?: string;
+  images?: string[];
   status: "pending" | "approved" | "rejected";
   isActive: boolean;
   createdAt: string;
+  vendorName?: string;
+  vendorEmail?: string;
+  vendor?: {
+    name?: string;
+    email?: string;
+  };
 };
