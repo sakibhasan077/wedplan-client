@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useClientSession } from "@/lib/core/client-session";
+import { VendorPlanBadge } from "@/components/dashboard/VendorPlanBadge";
 import {
   Sidebar,
   SidebarContent,
@@ -215,7 +216,16 @@ export function DashboardSidebar() {
             </div>
           )}
           <div className="min-w-0 group-data-[collapsible=icon]:hidden">
-            <p className="truncate text-sm font-semibold text-sidebar-foreground">{userName}</p>
+            <div className="flex min-w-0 items-center gap-2">
+              <p className="truncate text-sm font-semibold text-sidebar-foreground">
+                {userName}
+              </p>
+              {role === "vendor" && (
+                <VendorPlanBadge
+                  subscriptionPlan={user?.subscriptionPlan}
+                />
+              )}
+            </div>
             <p className="text-xs capitalize text-muted-foreground">{role}</p>
           </div>
         </div>

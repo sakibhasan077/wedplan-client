@@ -11,3 +11,19 @@ export const paymentVerify = async (sessionId:string) =>{
   })
   return res.json();
 }
+
+//get payment history
+export const getPaymentHistory = async () => {
+  if (!BASE_URL) {
+    throw new Error("Payment history API is not configured.");
+  }
+
+  const url = `${BASE_URL}/payments/history`;
+  const res = await fetch(url, { cache: "no-store" });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch payment history (${res.status}).`);
+  }
+
+  return res.json();
+}
