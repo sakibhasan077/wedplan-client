@@ -9,10 +9,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { addService } from "@/lib/actions/services";
+import { addService, countServices } from "@/lib/actions/services";
 import { useClientSession } from "@/lib/core/client-session";
 import { ImagePlus, Info, Loader2, UploadCloud } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { ChangeEvent, DragEvent, FormEvent } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -43,6 +44,7 @@ export default function AddServices() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [formMessage, setFormMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter()
 
   const { session } = useClientSession();
 
@@ -107,6 +109,14 @@ export default function AddServices() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const countService = await countServices(`vendorId=${session?.user?.id}`);
+      const subscriptionPlan = String(session?.user.subscriptionPlan ?? "free").toLowerCase();
+      if (subscriptionPlan === "free" && countService.count >= 3) {
+        toast.error("You have reached the limit of 3 services for the free plan. Please upgrade to add more services.");
+        setIsSubmitting(false);
+        router.push(`/dashboard/vendor/subscription`);
+        return;
+      }
     if (isSubmitting) return;
 
     setFormMessage("");

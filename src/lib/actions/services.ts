@@ -18,6 +18,17 @@ export const addService = async (data: unknown) => {
   }
 }
 
+//count services
+export const countServices = async(query="") =>{
+  const url = `${BASE_URL}/services/count?${query}`
+  const res = await fetch(url)
+  if (!res.ok) {
+    throw new Error('Failed to fetch service');
+  }
+  return res.json();
+
+}
+
 // Get Services by id
 export const getServiceById = async (serviceId: string) => {
   const res = await fetch(`${BASE_URL}/services/${serviceId}`);

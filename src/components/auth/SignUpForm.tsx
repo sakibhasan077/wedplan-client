@@ -137,7 +137,6 @@ export default function SignUpForm() {
         email: email.trim(),
         password,
         image: uploadedImageUrl,
-        // @ts-expect-error additionalFields role property
         role,
         callbackURL: callbackUrl,
       });
