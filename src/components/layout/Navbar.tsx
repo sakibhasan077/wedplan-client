@@ -200,7 +200,7 @@ export default function Navbar() {
                     Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    render={<Link href="/profile" />}
+                    render={<Link href={`dashboard/${user.role}/profile`} />}
                     onClick={() => setIsOpen(false)}
                   >
                     <UserRound aria-hidden="true" />
