@@ -95,7 +95,7 @@ const roleMenuItems: Record<Role, MenuItem[]> = {
   customer: [
     { label: "Overview", href: "/dashboard/customer", icon: LayoutDashboard },
     { label: "My Bookings", href: "/dashboard/customer/bookings", icon: CalendarDays },
-    { label: "Profile Settings", href: "/profile", icon: Settings },
+    { label: "Profile Settings", href: "/dashboard/customer/profile", icon: Settings },
   ],
   vendor: [
     { label: "Overview", href: "/dashboard/vendor", icon: LayoutDashboard },
@@ -103,14 +103,14 @@ const roleMenuItems: Record<Role, MenuItem[]> = {
     { label: "Add Service", href: "/dashboard/vendor/services/add", icon: PackagePlus },
     { label: "Booking Requests", href: "/dashboard/vendor/bookings", icon: ShoppingBag },
     { label: "Subscription", href: "/dashboard/vendor/subscription", icon: Crown },
-    { label: "Profile Settings", href: "/profile", icon: Settings },
+    { label: "Profile Settings", href: "/dashboard/vendor/profile", icon: Settings },
   ],
   admin: [
     { label: "Overview", href: "/dashboard/admin", icon: ShieldCheck },
     { label: "Manage Users", href: "/dashboard/admin/users", icon: Users },
     { label: "Manage Services", href: "/dashboard/admin/services", icon: HandCoins },
     { label: "Transactions", href: "/dashboard/admin/transactions", icon: WalletCards },
-    { label: "Profile Settings", href: "/profile", icon: Settings },
+    { label: "Profile Settings", href: "/dashboard/admin/profile", icon: Settings },
   ],
 };
 
