@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import VendorServiceList from "@/components/dashboard/vendor/VendorServiceList";
 import { getServicesByVendorId } from "@/lib/actions/services";
-import { useServerSession } from "@/lib/core/server-session";
+import { getServerSession } from "@/lib/core/server-session";
 import { Service } from "@/types/type";
 import { Plus } from "lucide-react";
 import type { Metadata } from "next";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 const ServicesPage = async () => {
-  const session = await useServerSession();
+  const session = await getServerSession();
   const vendorId = session?.user?.id;
   const servicesData:Service[] = await getServicesByVendorId(vendorId as string);
   const services: Service[] = Array.isArray(servicesData) ? servicesData:  [];
