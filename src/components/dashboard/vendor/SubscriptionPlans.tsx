@@ -14,8 +14,7 @@ export default function SubscriptionPlans({
 }: SubscriptionPlansProps) {
   const isPremium = subscriptionPlan === "premium";
 
-  const handleUpgradeToPremium = () => {
-  };
+  const handleUpgradeToPremium = () => {};
 
   const freeFeatures = [
     "Maximum 3 Active Services",
@@ -58,10 +57,14 @@ export default function SubscriptionPlans({
         </div>
 
         {!isPremium && (
-          <Button type="button" size="sm" onClick={handleUpgradeToPremium}>
-            <Crown aria-hidden="true" />
-            Upgrade to Premium
-          </Button>
+          <form action="/api/checkout_sessions" method="POST">
+            <section>
+              <Button type="submit" role="link" size="sm" onClick={handleUpgradeToPremium}>
+                <Crown aria-hidden="true" />
+                Upgrade to Premium
+              </Button>
+            </section>
+          </form>
         )}
       </div>
 
@@ -152,15 +155,19 @@ export default function SubscriptionPlans({
               Current Plan
             </Button>
           ) : (
-            <Button
-              type="button"
-              size="lg"
-              className="mt-6 w-full"
-              onClick={handleUpgradeToPremium}
-            >
-              <Crown aria-hidden="true" />
-              Upgrade to Premium
-            </Button>
+            <form action="/api/checkout_sessions" method="POST">
+              <section>
+                <Button
+                  type="submit"
+                  role="link"
+                  size="lg"
+                  className="mt-6 w-full"
+                >
+                  <Crown aria-hidden="true" />
+                  Upgrade to Premium
+                </Button>
+              </section>
+            </form>
           )}
         </article>
       </div>
