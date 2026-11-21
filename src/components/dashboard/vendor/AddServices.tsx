@@ -109,19 +109,24 @@ export default function AddServices() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const countService = await countServices(`vendorId=${session?.user?.id}`);
-      const subscriptionPlan = String(session?.user.subscriptionPlan ?? "free").toLowerCase();
-      if (subscriptionPlan === "free" && countService.count >= 3) {
-        toast.error("You have reached the limit of 3 services for the free plan. Please upgrade to add more services.");
-        setIsSubmitting(false);
-        router.push(`/dashboard/vendor/subscription`);
-        return;
-      }
-    if (isSubmitting) return;
-
-    setFormMessage("");
     const form = event.currentTarget;
     const formData = new FormData(form);
+
+    if (isSubmitting) return;
+
+    const countService = await countServices(`vendorId=${session?.user?.id}`);
+    const subscriptionPlan = String(
+      session?.user.subscriptionPlan ?? "free",
+    ).toLowerCase();
+    if (subscriptionPlan === "free" && countService.count >= 3) {
+      toast.error(
+        "You have reached the limit of 3 services for the free plan. Please upgrade to add more services.",
+      );
+      router.push("/dashboard/vendor/subscription");
+      return;
+    }
+
+    setFormMessage("");
     const serviceName = String(formData.get("serviceName") ?? "").trim();
     const category = String(formData.get("category") ?? "");
     const description = String(formData.get("description") ?? "").trim();
