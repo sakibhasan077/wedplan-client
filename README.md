@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WedPlan
 
-## Getting Started
+WedPlan is a wedding-planning platform that helps couples discover wedding services and manage bookings, while giving vendors tools to manage their services and administrators tools to oversee the marketplace.
 
-First, run the development server:
+## Important Features
+
+- Browse wedding services and view service details.
+- Register and sign in with email and password, with Google sign-in support.
+- Manage vendor services, availability, and booking requests.
+- Create and track customer bookings.
+- Role-based customer, vendor, and admin dashboards.
+- Admin tools for managing users and reviewing services.
+- Vendor premium-plan checkout using Stripe.
+- Profile image and service image uploads using ImgBB.
+
+## Technology Stack
+
+| Area | Technologies |
+| --- | --- |
+| Client | Next.js 16 (App Router), React 19, TypeScript |
+| UI | Tailwind CSS 4, Base UI, Motion |
+| Authentication | Better Auth, MongoDB |
+| Server | Node.js, Express 5 |
+| Data | MongoDB |
+| Payments and uploads | Stripe, ImgBB |
+
+## Project Links
+
+- **Live website:** Not deployed yet.
+- **Client repository:** [sakibhasan077/wedplan-client](https://github.com/sakibhasan077/wedplan-client)
+- **Server repository:** [sakibhasan077/wedplan-server](https://github.com/sakibhasan077/wedplan-server)
+
+## Installation
+
+### Prerequisites
+
+- Node.js 20.9 or later and npm.
+- A MongoDB connection string.
+- Stripe test credentials for payment features.
+- Google OAuth credentials for Google sign-in (optional).
+- An ImgBB API key for image uploads (optional).
+
+Clone both repositories and install their dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/sakibhasan077/wedplan-client.git
+git clone https://github.com/sakibhasan077/wedplan-server.git
+
+cd wedplan-client
+npm install
+
+cd ../wedplan-server
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Run the Project Locally
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The client and server run as separate processes. Configure the environment files before starting them.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Configure the server
 
-## Learn More
+Create a `.env` file in the `wedplan-server` directory:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+MONGODB_URI=your_mongodb_connection_string
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
+port=5000
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Start the server from that directory:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+node index.js
+```
 
-## Deploy on Vercel
+### 2. Configure the client
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Create a `.env.local` file in the `wedplan-client` directory:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+NEXT_PUBLIC_SERVER_URL=http://localhost:5000
+BETTER_AUTH_URL=http://localhost:3000
+MONGODB_URI=your_mongodb_connection_string
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
+
+# Optional: enable Google sign-in
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+# Optional: enable profile and service image uploads
+NEXT_PUBLIC_IMGBB_API_KEY=your_imgbb_api_key
+```
+
+In a second terminal, start the client:
+
+```bash
+cd wedplan-client
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+Keep `.env` and `.env.local` private; do not commit credentials or API keys.
