@@ -99,3 +99,11 @@ export const getAdminServices = async (query="") => {
     return [];
   }
 }
+
+
+// get data for brows jobs
+export const getBrowseService = async (query="")=>{
+  const url = `${BASE_URL}/services/browse?${query}`;
+  const res = await fetch(url);
+  return res.json();
+}
