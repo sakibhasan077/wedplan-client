@@ -27,7 +27,7 @@ export const addBookings = async (data: unknown) => {
   return result;
 };
 
-// get booking data
+// get booking data by user
 export const getMyBooking = async(query="") =>{
   const url = `${BASE_URL}/bookings/bookings/my?${query}`;
   const res = await fetch(url);
@@ -37,6 +37,42 @@ export const getMyBooking = async(query="") =>{
   const result = res.json();
   return result;
 }
+
+// get booking data by vendor
+export const getBookingByVendor = async(query="") =>{
+  const url = `${BASE_URL}/bookings/bookings/vendor?${query}`;
+  const res = await fetch(url);
+  if(!res.ok){
+    throw new Error(`Failed to fetch bookings (${res.status})`)
+  }
+  const result = res.json();
+  return result;
+}
+
+// update status
+export const updateStatus = async(id:string, status:unknown)=>{
+  if (!BASE_URL) {
+    throw new Error("Booking service is not configured.");
+  }
+
+  const url = `${BASE_URL}/bookings/${id}/status`;
+  const res = await fetch(url,{
+    method: "PATCH",
+    headers: {
+      'Content-Type' : "application/json"
+    },
+    body: JSON.stringify({status})
+  })
+  const result = await res.json();
+  if(!res.ok){
+    throw new Error(
+      typeof result?.message === "string"
+        ? result.message
+        : `Failed to update booking (${res.status}).`,
+    );
+  }
+  return result;
+};
 
 // cancel booking request
 export const cancelBooking = async(id:string) =>{
