@@ -1,3 +1,6 @@
+"use server";
+import { authFetch, protectedMutation } from "../core/server-session";
+
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 // post
@@ -7,13 +10,7 @@ export const addBookings = async (data: unknown) => {
   }
 
   const url = `${BASE_URL}/bookings`;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+    const res = await protectedMutation(url,"POST",data)
   const result = await res.json();
 
   if (!res.ok) {
@@ -30,7 +27,7 @@ export const addBookings = async (data: unknown) => {
 // get booking data by user
 export const getMyBooking = async(query="") =>{
   const url = `${BASE_URL}/bookings/bookings/my?${query}`;
-  const res = await fetch(url);
+  const res = await authFetch(url)
   if(!res.ok){
     throw new Error(`Failed to fetch bookings (${res.status})`)
   }
@@ -41,7 +38,7 @@ export const getMyBooking = async(query="") =>{
 // get booking data by vendor
 export const getBookingByVendor = async(query="") =>{
   const url = `${BASE_URL}/bookings/bookings/vendor?${query}`;
-  const res = await fetch(url);
+  const res = await authFetch(url)
   if(!res.ok){
     throw new Error(`Failed to fetch bookings (${res.status})`)
   }
@@ -56,13 +53,7 @@ export const updateStatus = async(id:string, status:unknown)=>{
   }
 
   const url = `${BASE_URL}/bookings/${id}/status`;
-  const res = await fetch(url,{
-    method: "PATCH",
-    headers: {
-      'Content-Type' : "application/json"
-    },
-    body: JSON.stringify({status})
-  })
+  const res = await protectedMutation(url,"PATCH",status)
   const result = await res.json();
   if(!res.ok){
     throw new Error(
@@ -81,9 +72,7 @@ export const cancelBooking = async(id:string) =>{
   }
 
   const url = `${BASE_URL}/bookings/${id}/cancel`;
-  const res = await fetch(url,{
-    method: "DELETE"
-  });
+  const res = await protectedMutation(url,"DELETE")
 
   const result = await res.json();
   if (!res.ok) {

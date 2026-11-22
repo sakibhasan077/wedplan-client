@@ -14,7 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { deleteService, updateServices } from "@/lib/actions/services";
+import {  deleteServiceByAdmin, updateServicesByAdmin } from "@/lib/actions/services";
 import type { Service } from "@/types/type";
 
 type AdminServiceCardProps = {
@@ -37,7 +37,7 @@ export default function AdminServiceCard({ service }: AdminServiceCardProps) {
   const handleStatusChange = async (nextStatus: "approved" | "rejected") => {
     setIsUpdating(true);
     try {
-      await updateServices(service._id, { status: nextStatus });
+      await updateServicesByAdmin(service._id, { status: nextStatus });
       setStatus(nextStatus);
     } catch (error) {
       console.error("Failed to update service status:", error);
@@ -50,7 +50,7 @@ export default function AdminServiceCard({ service }: AdminServiceCardProps) {
     const nextIsActive = !isActive;
     setIsUpdating(true);
     try {
-      await updateServices(service._id, { isActive: nextIsActive });
+      await updateServicesByAdmin(service._id, { isActive: nextIsActive });
       setIsActive(nextIsActive);
     } catch (error) {
       console.error("Failed to update service availability:", error);
@@ -62,7 +62,7 @@ export default function AdminServiceCard({ service }: AdminServiceCardProps) {
   const handleDelete = async () => {
     setIsUpdating(true);
     try {
-      await deleteService(service._id);
+      await deleteServiceByAdmin(service._id);
       setIsDeleteDialogOpen(false);
       setIsDeleted(true);
     } catch (error) {

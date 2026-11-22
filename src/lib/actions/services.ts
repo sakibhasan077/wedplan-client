@@ -1,16 +1,13 @@
+"use server"
+import { authFetch, protectedMutation } from "../core/server-session";
+
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
-// post request to the server
+// post request to the server(done)
 export const addService = async (data: unknown) => {
   try {
     const url = `${BASE_URL}/services`;
-    const res= await fetch(url,{
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
+    const res = await protectedMutation(url,"POST",data)
     return res.json();
   }catch (error) {
     console.error('Error occurred while making POST request:', error);
@@ -18,10 +15,10 @@ export const addService = async (data: unknown) => {
   }
 }
 
-//count services
+//count services (done)
 export const countServices = async(query="") =>{
   const url = `${BASE_URL}/services/count?${query}`
-  const res = await fetch(url)
+  const res = await authFetch(url)
   if (!res.ok) {
     throw new Error('Failed to fetch service');
   }
@@ -29,20 +26,21 @@ export const countServices = async(query="") =>{
 
 }
 
-// Get Services by id
+// Get Services by id (done)
 export const getServiceById = async (serviceId: string) => {
-  const res = await fetch(`${BASE_URL}/services/${serviceId}`);
+  const api = `${BASE_URL}/services/${serviceId}`;
+  const res = await authFetch(api)
   if (!res.ok) {
     throw new Error('Failed to fetch service');
   }
   return res.json();
 }
 
-// Get Services by vendor id
+// Get Services by vendor id (done)
 export const getServicesByVendorId = async (vendorId: string) => {
   try {
     const url = `${BASE_URL}/services/vendor/${vendorId}`;
-    const res = await fetch(url);
+    const res = await authFetch(url);
     return res.json();
   } catch (error) {
     console.error('Error occurred while making GET request:', error);
@@ -50,20 +48,14 @@ export const getServicesByVendorId = async (vendorId: string) => {
   }
 }
 
-// update Services
+// update Services by vendor
 export const updateServices = async(
   serviceId: string,
   data: Record<string, unknown>,
 ) => {
   try {
     const url = `${BASE_URL}/services/${serviceId}`;
-    const res = await fetch(url, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    const res = await protectedMutation(url,"PATCH",data)
     return res.json();
   }catch (error) {
     console.error('Error occurred while making PUT request:', error);
@@ -71,13 +63,49 @@ export const updateServices = async(
   }
 }
 
-//Delete Services
+//Delete Services by vendor
 export const deleteService = async(serviceId: string) => {
   try {
     const url = `${BASE_URL}/services/${serviceId}`;
-    const res = await fetch(url, {
-      method: 'DELETE',
-    });
+    const res = await protectedMutation(url,"DELETE")
+    // const res = await fetch(url, {
+    //   method: 'DELETE',
+    // });
+    return res.json();
+  }catch (error) {
+    console.error('Error occurred while making DELETE request:', error);
+    throw error;
+  }
+}
+
+// update Services by admin
+export const updateServicesByAdmin = async(
+  serviceId: string,
+  data: Record<string, unknown>,
+) => {
+  try {
+    const url = `${BASE_URL}/services/${serviceId}/admin`;
+    const res = await protectedMutation(url, "PATCH", data);
+    if (!res.ok) {
+      throw new Error(`Failed to update service (${res.status}).`);
+    }
+
+    if (!res.headers.get("content-type")?.includes("application/json")) {
+      throw new Error("Failed to update service: server returned a non-JSON response.");
+    }
+
+    return res.json();
+  }catch (error) {
+    console.error('Error occurred while updating service by admin:', error);
+    throw error;
+  }
+}
+
+//Delete Services by vendor
+export const deleteServiceByAdmin = async(serviceId: string) => {
+  try {
+    const url = `${BASE_URL}/services/${serviceId}/admin`;
+    const res = await protectedMutation(url,"DELETE")
     return res.json();
   }catch (error) {
     console.error('Error occurred while making DELETE request:', error);
@@ -89,7 +117,7 @@ export const deleteService = async(serviceId: string) => {
 export const getAdminServices = async (query="") => {
   try {
     const url = `${BASE_URL}/admin/services?${query}`;
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await authFetch(url)
     if (!res.ok) {
       return [];
     }

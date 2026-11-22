@@ -1,22 +1,20 @@
+"use server"
+
+import { authFetch, protectedMutation } from "../core/server-session";
+
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 // get users
 export const getUsers = async (query = "") => {
   const url = `${BASE_URL}/users?${query}`;
-  const res = await fetch(url)
+  const res = await authFetch(url)
   return res.json();
 }
 
 // update
-export const updateUser = async (userId:string,data:any)=>{
+export const updateUser= async (userId:string,data:any)=>{
   const url = `${BASE_URL}/users/${userId}`;
-    const res = await fetch(url, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+  const res = await protectedMutation(url,"PATCH",data)
     return res.json();
 }
 
@@ -27,14 +25,7 @@ export const UpdateUsersProfile = async (userId: string, data: unknown) => {
   }
 
   const url = `${BASE_URL}/users/profile/${userId}`;
-  console.log(url);
-  const res = await fetch(url, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  const res = await protectedMutation(url,"PATCH",data)
 
   if (!res.ok) {
     throw new Error(`Failed to update user profile (${res.status}).`);
@@ -47,6 +38,6 @@ export const UpdateUsersProfile = async (userId: string, data: unknown) => {
 // get users by id
 export const getUserById = async (userId:string) =>{
   const url = `${BASE_URL}/users/brows-details/${userId}`;
-  const res = await fetch(url);
+  const res = await authFetch(url)
   return res.json();
 }

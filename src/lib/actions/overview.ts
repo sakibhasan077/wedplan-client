@@ -1,8 +1,13 @@
+"use server";
+
+import { authFetch } from "../core/server-session";
+
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 // get overview data for admin
 export const getAdminOverview = async () => {
-  const res = await fetch(`${BASE_URL}/api/admin/overview`);
+  const url = `${BASE_URL}/api/admin/overview`
+  const res = await authFetch(url)
   if (!res.ok) {
     throw new Error(`Failed to fetch overview data (${res.status})`);
   }
@@ -12,10 +17,8 @@ export const getAdminOverview = async () => {
 
 // get vendor overview
 export const getVendorOverview = async (vendorId: string) => {
-  const res = await fetch(
-    `${BASE_URL}/api/vendor/overview?vendorId=${vendorId}`
-  );
-
+  const url = `${BASE_URL}/api/vendor/overview?vendorId=${vendorId}`
+  const res = await authFetch(url)
   if (!res.ok) {
     throw new Error(`Failed to fetch vendor overview (${res.status})`);
   }
@@ -24,10 +27,8 @@ export const getVendorOverview = async (vendorId: string) => {
 };
 // get customer overview
 export const getCustomerOverview = async (customerId: string) => {
-  const res = await fetch(
-    `${BASE_URL}/api/customer/overview?customerId=${customerId}`
-  );
-
+  const url = `${BASE_URL}/api/customer/overview?customerId=${customerId}`
+  const res = await authFetch(url)
   if (!res.ok) {
     throw new Error(`Failed to fetch customer overview (${res.status})`);
   }

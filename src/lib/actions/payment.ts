@@ -1,14 +1,12 @@
+"use server";
+
+import { authFetch, protectedMutation } from "../core/server-session";
+
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 export const paymentVerify = async (sessionId:string) =>{
   const url =`${BASE_URL}/payment/checkout`;
-  const res = await fetch(url,{
-    method: 'POST',
-    headers:{
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({sessionId})
-  })
+  const res = await protectedMutation(url,"POST",{sessionId})
   return res.json();
 }
 
@@ -19,7 +17,7 @@ export const getPaymentHistory = async () => {
   }
 
   const url = `${BASE_URL}/payments/history`;
-  const res = await fetch(url, { cache: "no-store" });
+  const res = await authFetch(url)
 
   if (!res.ok) {
     throw new Error(`Failed to fetch payment history (${res.status}).`);
