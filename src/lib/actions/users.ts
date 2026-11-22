@@ -42,3 +42,11 @@ export const UpdateUsersProfile = async (userId: string, data: unknown) => {
 
   return res.json();
 }
+
+
+// get users by id
+export const getUserById = async (userId:string) =>{
+  const url = `${BASE_URL}/users/brows-details/${userId}`;
+  const res = await fetch(url);
+  return res.json();
+}
