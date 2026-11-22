@@ -22,3 +22,15 @@ export const getVendorOverview = async (vendorId: string) => {
 
   return res.json();
 };
+// get customer overview
+export const getCustomerOverview = async (customerId: string) => {
+  const res = await fetch(
+    `${BASE_URL}/api/customer/overview?customerId=${customerId}`
+  );
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch customer overview (${res.status})`);
+  }
+
+  return res.json();
+};
