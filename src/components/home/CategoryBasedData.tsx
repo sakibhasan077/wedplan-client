@@ -16,7 +16,7 @@ import { motion } from "motion/react";
 const categories = [
   {
     name: "Photography & Videography",
-    image: "/images/category-1.jfif",
+    image: "/images/category-1.jpg",
     icon: Camera,
     accent: "text-primary",
   },

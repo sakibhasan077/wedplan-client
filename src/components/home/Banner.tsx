@@ -6,7 +6,7 @@ export default function Banner() {
   return (
     <section className="relative isolate min-h-130 overflow-hidden sm:min-h-140 lg:min-h-155">
       <Image
-        src="/images/banner-bg.jfif"
+        src="/images/banner-bg.jpg"
         alt="A couple celebrating their wedding"
         fill
         priority
