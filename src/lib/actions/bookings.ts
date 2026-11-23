@@ -47,20 +47,32 @@ export const getBookingByVendor = async(query="") =>{
 }
 
 // update status
-export const updateStatus = async(id:string, status:unknown)=>{
+export const updateStatus = async (
+  id: string,
+  status: "Accepted" | "Rejected",
+) => {
   if (!BASE_URL) {
     throw new Error("Booking service is not configured.");
   }
 
   const url = `${BASE_URL}/bookings/${id}/status`;
-  const res = await protectedMutation(url,"PATCH",status)
-  const result = await res.json();
-  if(!res.ok){
+  const res = await protectedMutation(url, "PATCH", { status });
+  if (!res.headers.get("content-type")?.includes("application/json")) {
     throw new Error(
-      typeof result?.message === "string"
-        ? result.message
-        : `Failed to update booking (${res.status}).`,
+      `Failed to update booking (${res.status}): server returned a non-JSON response.`,
     );
+  }
+
+  const result: unknown = await res.json();
+  if (!res.ok) {
+    const message =
+      typeof result === "object" &&
+      result !== null &&
+      "message" in result &&
+      typeof result.message === "string"
+        ? result.message
+        : `Failed to update booking (${res.status}).`;
+    throw new Error(message);
   }
   return result;
 };
