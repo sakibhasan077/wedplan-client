@@ -3,24 +3,25 @@ import { MongoClient } from "mongodb";
 const uri = process.env.MONGODB_URI;
 
 if (!uri) {
-  throw new Error("MONGODB_URI is not configured");
+  throw new Error("Missing MONGODB_URI");
 }
 
 const globalForMongo = globalThis as typeof globalThis & {
   mongoClient?: MongoClient;
 };
 
-const client =
-  globalForMongo.mongoClient ?? new MongoClient(uri, {
+export const mongoClient =
+  globalForMongo.mongoClient ??
+  new MongoClient(uri, {
     maxPoolSize: 10,
     minPoolSize: 0,
-    serverSelectionTimeoutMS: 10000,
-    connectTimeoutMS: 10000,
+    maxIdleTimeMS: 60_000,
+    serverSelectionTimeoutMS: 10_000,
+    connectTimeoutMS: 10_000,
   });
 
 if (process.env.NODE_ENV !== "production") {
-  globalForMongo.mongoClient = client;
+  globalForMongo.mongoClient = mongoClient;
 }
 
-export const mongoClient = client;
-export const db = client.db("wedplan");
+export const db = mongoClient.db("wedplan");
