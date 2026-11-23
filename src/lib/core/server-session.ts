@@ -40,6 +40,13 @@ export const protectedMutation = async(api: string, method: string, data?: unkno
   return res;
 }
 
+export const isBlockUser = async()=>{
+  const session = await getServerSession();
+  if(!session || session.user.isBlocked ){
+    redirect("/unauthorized")
+  }
+}
+
 export const requiredRole = async (role: string) => {
     const session = await getServerSession();
     if (!session || session.user.role !== role) {

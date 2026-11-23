@@ -2,8 +2,10 @@ import type { ReactNode } from "react";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardTopbar } from "@/components/dashboard/DashboardTopbar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { isBlockUser } from "@/lib/core/server-session";
 
-const DashboardLayout = ({ children }: { children: ReactNode }) => {
+const DashboardLayout = async ({ children }: { children: ReactNode }) => {
+  await isBlockUser()
   return (
     <SidebarProvider>
       <DashboardSidebar />

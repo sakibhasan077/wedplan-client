@@ -26,7 +26,7 @@ WedPlan is a wedding-planning platform that helps couples discover wedding servi
 
 ## Project Links
 
-- **Live website:** Not deployed yet.
+- **Live website:** [https://wedplan-client-one.vercel.app](https://wedplan-client-one.vercel.app)
 - **Client repository:** [sakibhasan077/wedplan-client](https://github.com/sakibhasan077/wedplan-client)
 - **Server repository:** [sakibhasan077/wedplan-server](https://github.com/sakibhasan077/wedplan-server)
 
