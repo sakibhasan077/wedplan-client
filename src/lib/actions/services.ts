@@ -28,12 +28,30 @@ export const countServices = async(query="") =>{
 
 // Get Services by id (done)
 export const getServiceById = async (serviceId: string) => {
-  const api = `${BASE_URL}/services/${serviceId}`;
-  const res = await authFetch(api)
-  if (!res.ok) {
-    throw new Error('Failed to fetch service');
+  if (!/^[\da-f]{24}$/i.test(serviceId)) {
+    return null;
   }
-  return res.json();
+
+  const api = `${BASE_URL}/services/${serviceId}`;
+  const res = await authFetch(api);
+  if (res.status === 404) {
+    return null;
+  }
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch service (${res.status}).`);
+  }
+
+  const responseBody = await res.text();
+  if (!responseBody.trim()) {
+    return null;
+  }
+
+  if (!res.headers.get("content-type")?.includes("application/json")) {
+    throw new Error("Failed to fetch service: server returned a non-JSON response.");
+  }
+
+  return JSON.parse(responseBody);
 }
 
 // Get Services by vendor id (done)

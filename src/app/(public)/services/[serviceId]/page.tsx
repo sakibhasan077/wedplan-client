@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { MapPin } from "lucide-react";
 import { getServiceById } from "@/lib/actions/services";
 import { getUserById } from "@/lib/actions/users";
@@ -21,7 +22,11 @@ const BrowsDetailsPage = async ({
   params: Promise<{ serviceId: string }>;
 }) => {
   const { serviceId } = await params;
-  const serviceData: Service = await getServiceById(serviceId);
+  const serviceData = (await getServiceById(serviceId)) as Service | null;
+  if (!serviceData) {
+    notFound();
+  }
+
   const vendorDetails = await getUserById(serviceData.vendorId);
   const vendor: VendorDetails =
     vendorDetails?.user ?? vendorDetails ?? {};
