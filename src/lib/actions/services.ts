@@ -39,9 +39,21 @@ export const getServiceById = async (serviceId: string) => {
 // Get Services by vendor id (done)
 export const getServicesByVendorId = async (vendorId: string) => {
   try {
+    if (!BASE_URL) {
+      throw new Error("Service API is not configured.");
+    }
+
     const url = `${BASE_URL}/services/vendor/${vendorId}`;
     const res = await authFetch(url);
-    return res.json();
+    if (!res.ok) {
+      throw new Error(`Failed to fetch vendor services (${res.status}).`);
+    }
+
+    if (!res.headers.get("content-type")?.includes("application/json")) {
+      throw new Error("Failed to fetch vendor services: server returned a non-JSON response.");
+    }
+
+    return await res.json();
   } catch (error) {
     console.error('Error occurred while making GET request:', error);
     throw error;
