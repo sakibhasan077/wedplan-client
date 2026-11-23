@@ -1,103 +1,234 @@
-# WedPlan
+# 💍 WedPlan – Wedding Planning Platform
 
-WedPlan is a wedding-planning platform that helps couples discover wedding services and manage bookings, while giving vendors tools to manage their services and administrators tools to oversee the marketplace.
+WedPlan is a modern wedding planning platform designed to make wedding arrangements easier and more organized. It connects customers with professional wedding service vendors, allowing customers to explore services, manage booking requests, and plan their special day efficiently.
 
-## Important Features
+The platform provides dedicated dashboards for Customers, Vendors, and Admins, with role-based access and service management features.
 
-- Browse wedding services and view service details.
-- Register and sign in with email and password, with Google sign-in support.
-- Manage vendor services, availability, and booking requests.
-- Create and track customer bookings.
-- Role-based customer, vendor, and admin dashboards.
-- Admin tools for managing users and reviewing services.
-- Vendor premium-plan checkout using Stripe.
-- Profile image and service image uploads using ImgBB.
+---
 
-## Technology Stack
+## ✨ Important Features
 
-| Area | Technologies |
-| --- | --- |
-| Client | Next.js 16 (App Router), React 19, TypeScript |
-| UI | Tailwind CSS 4, Base UI, Motion |
-| Authentication | Better Auth, MongoDB |
-| Server | Node.js, Express 5 |
-| Data | MongoDB |
-| Payments and uploads | Stripe, ImgBB |
+### 👤 Authentication & User Management
+- Secure user authentication and authorization.
+- Role-based access for Admins, Vendors, and Customers.
+- User profile management.
+- Admin can block and unblock users.
+- Protected routes and APIs.
 
-## Project Links
+### 🏪 Vendor Features
+- Vendor dashboard with an overview of business activities.
+- Add, update, and delete wedding services.
+- Manage service availability (Active/Inactive).
+- Track service approval status.
+- Receive and manage customer booking requests.
+- Accept or reject booking requests.
+- Free and Premium subscription plans.
+- Upgrade to Premium using Stripe Checkout.
+- Premium Vendor Badge.
 
-- **Live website:** [https://wedplan-client-one.vercel.app](https://wedplan-client-one.vercel.app)
-- **Client repository:** [sakibhasan077/wedplan-client](https://github.com/sakibhasan077/wedplan-client)
-- **Server repository:** [sakibhasan077/wedplan-server](https://github.com/sakibhasan077/wedplan-server)
+### 💒 Customer Features
+- Browse approved and active wedding services.
+- Search, filter, and sort services.
+- View detailed service information.
+- Submit booking requests with event details.
+- Track booking request status.
+- Cancel pending booking requests.
+- Manage personal profile.
 
-## Installation
+### 🛡️ Admin Features
+- Admin dashboard with platform statistics.
+- Manage registered users.
+- Search and filter users by role.
+- Block and unblock users.
+- Review submitted services.
+- Approve or reject services.
+- Change published service status.
+- Delete inappropriate services.
+- View transaction information.
+
+### 💳 Payment & Subscription
+- Stripe Checkout integration in Test Mode.
+- Premium subscription management.
+- Secure payment verification using Stripe Webhooks.
+- Transaction history management.
+- Server-side subscription updates after verified payments.
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Shadcn UI / HeroUI
+- Lucide React
+- Framer Motion
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- JWT Authentication
+
+### Authentication & Payment
+- Better Auth
+- Stripe Checkout
+- Stripe Webhooks
+
+### Image Hosting
+- ImgBB
+
+---
+
+## 📁 Project Structure
+
+```text
+WedPlan/
+├── wedplan-client/
+│   ├── public/
+│   ├── src/
+│   │   ├── app/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── lib/
+│   │   ├── services/
+│   │   └── types/
+│   ├── .env.local
+│   └── package.json
+│
+└── wedplan-server/
+    ├── index.js
+    ├── package.json
+    └── .env
+```
+
+*Note: The structure above is illustrative. Adjust it to match the actual project structure.*
+
+---
+
+## ⚙️ Installation Instructions
 
 ### Prerequisites
 
-- Node.js 20.9 or later and npm.
-- A MongoDB connection string.
-- Stripe test credentials for payment features.
-- Google OAuth credentials for Google sign-in (optional).
-- An ImgBB API key for image uploads (optional).
+Make sure you have installed:
 
-Clone both repositories and install their dependencies:
+- Node.js (LTS version recommended)
+- npm
+- MongoDB account or local MongoDB server
+- Stripe account
+- ImgBB API Key
+
+### 1. Clone the Client Repository
 
 ```bash
-git clone https://github.com/sakibhasan077/wedplan-client.git
-git clone https://github.com/sakibhasan077/wedplan-server.git
-
+git clone YOUR_CLIENT_REPOSITORY_URL
 cd wedplan-client
 npm install
+```
 
-cd ../wedplan-server
+### 2. Clone the Server Repository
+
+Open another terminal:
+
+```bash
+git clone YOUR_SERVER_REPOSITORY_URL
+cd wedplan-server
 npm install
 ```
 
-## Run the Project Locally
+### 3. Configure Environment Variables
 
-The client and server run as separate processes. Configure the environment files before starting them.
-
-### 1. Configure the server
-
-Create a `.env` file in the `wedplan-server` directory:
+Create a `.env.local` file in the client directory:
 
 ```env
-MONGODB_URI=your_mongodb_connection_string
-STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
-port=5000
+NEXT_PUBLIC_API_URL=YOUR_BACKEND_API_URL
+NEXT_PUBLIC_IMGBB_API_KEY=YOUR_IMGBB_API_KEY
 ```
 
-Start the server from that directory:
+Create a `.env` file in the server directory:
+
+```env
+PORT=5000
+MONGODB_URI=YOUR_MONGODB_CONNECTION_STRING
+STRIPE_SECRET_KEY=YOUR_STRIPE_SECRET_KEY
+STRIPE_WEBHOOK_SECRET=YOUR_STRIPE_WEBHOOK_SECRET
+```
+
+Add other authentication-related environment variables required by your Better Auth configuration.
+
+**Important:** Never commit secret keys, database credentials, or private environment variables to GitHub.
+
+---
+
+## 🚀 How to Run the Project Locally
+
+### Start the Backend Server
+
+Navigate to the server directory:
 
 ```bash
-node index.js
+cd wedplan-server
+npm run dev
 ```
 
-### 2. Configure the client
+The backend server should run at:
 
-Create a `.env.local` file in the `wedplan-client` directory:
-
-```env
-NEXT_PUBLIC_SERVER_URL=http://localhost:5000
-BETTER_AUTH_URL=http://localhost:3000
-MONGODB_URI=your_mongodb_connection_string
-STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
-
-# Optional: enable Google sign-in
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-# Optional: enable profile and service image uploads
-NEXT_PUBLIC_IMGBB_API_KEY=your_imgbb_api_key
+```text
+http://localhost:5000
 ```
 
-In a second terminal, start the client:
+### Start the Frontend Application
+
+Open another terminal and navigate to the client directory:
 
 ```bash
 cd wedplan-client
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open your browser and visit:
 
-Keep `.env` and `.env.local` private; do not commit credentials or API keys.
+```text
+http://localhost:3000
+```
+
+---
+
+## 🌐 Live Website
+
+**Live Demo:** [WedPlan – Visit Website](https://wedplan-client-one.vercel.app)
+
+---
+
+## 📂 Repository Links
+
+| Repository | Link |
+|---|---|
+| Client Repository | [GitHub – Client](https://github.com/sakibhasan077/wedplan-client) |
+| Server Repository | [GitHub – Server](https://github.com/sakibhasan077/wedplan-server) |
+
+---
+
+## 🔐 Security & Validation
+
+- Protected routes and role-based authorization.
+- Backend-side JWT verification.
+- Server-side input validation.
+- Resource ownership verification.
+- Secure Stripe payment verification through Webhooks.
+- Sensitive credentials stored in environment variables.
+
+---
+
+## 👨‍💻 Author
+
+**Sakib Hasan**
+
+- GitHub: [sakibhasan077](https://github.com/sakibhasan077)
+- LinkedIn: [Sakib Hasan](https://linkedin.com/in/sakibhasan-web)
+
+---
+
+⭐ If you find this project interesting, feel free to explore the repositories and share your feedback!
