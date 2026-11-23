@@ -40,6 +40,11 @@ export default function BookingRequestForm({
       router.push("/sign-in");
       return;
     }
+    if(user.isBlocked){
+      toast.error("You are Blocked.You can't book ");
+      router.push("/unauthorized")
+      return
+    }
 
     if (role === "vendor" && vendorId === user.id) {
       toast.error("Vendors cannot request bookings for their own services.");
